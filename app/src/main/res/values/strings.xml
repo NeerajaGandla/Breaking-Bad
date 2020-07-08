@@ -1,25 +1,29 @@
 <resources>
     <string name="app_name">Breaking Bad</string>
-    <string name="menu_search">Search</string>
+
+    <string name="title_about">Say My Name</string>
+    <string name="title_credits">@string/menu_nav_credits</string>
+
     <string name="label_occupation">Occupation</string>
+
+    <string name="menu_search">Search</string>
+    <string name="menu_nav_about">About</string>
+    <string name="menu_nav_credits">Credits</string>
+
     <string name="hint_search">Search</string>
-    <string name="label_no_results">No Results !</string>
-    <string name="title_activity_nav">Nav</string>
+
+    <string name="msg_no_results">No Results !</string>
+    <string name="msg_no_internet">No Internet Connection</string>
+    <string name="msg_loader">We\'re Done when\nI Say We\'re Done</string>
+
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
 
-    <string name="menu_about">About</string>
-    <string name="menu_credits">Credits</string>
-    <string name="author_name">Piyush Ku Pandey</string>
-    <string name="author_desc">Developing Android Apps Since 2 Years.</string>
-    <string name="app_desc">As a big fan Of \'Breaking Bad\' TV Series I wanted to have all the info for it.\n\nBut I was unable to find a source which have all of it.\n\nSo I created one...</string>
-    <string name="author_api_name">Tim Biles</string>
-    <string name="author_api_desc">API Developer</string>
-    <string name="api_doc"><u>API Documentation</u></string>
-    <string name="api_github"><u>API Github Repo</u></string>
-    <string name="title_about">Say My Name</string>
+    <string name="value_about_author_name">Piyush Ku Pandey</string>
+    <string name="value_about_author_desc">Developing Android Apps Since 2 Years.</string>
+    <string name="value_about_app_desc">As a big fan Of \'Breaking Bad\' TV Series I wanted to have all the info for it.\n\nBut I was unable to find a source which have all of it.\n\nSo I created one…</string>
+    <string name="value_credit_api_author_name">Tim Biles</string>
+    <string name="value_credit_api_desc">API Developer</string>
+    <string name="value_credit_api_doc"><u>API Documentation</u></string>
+    <string name="value_credit_api_github"><u>API Github Repo</u></string>
 </resources>

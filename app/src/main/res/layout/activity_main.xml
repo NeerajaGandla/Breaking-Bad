@@ -48,7 +48,8 @@
                 android:src="@drawable/icon_back"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription" />
 
             <EditText
                 android:id="@+id/edit_search"
@@ -67,7 +68,8 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/iv_cancel"
                 app:layout_constraintStart_toEndOf="@+id/iv_back"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:importantForAutofill="no" />
 
             <ImageView
                 android:id="@+id/iv_cancel"
@@ -77,7 +79,8 @@
                 android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -91,6 +94,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/loading_view"
+            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -111,7 +115,7 @@
                 android:layout_marginStart="@dimen/dp16"
                 android:fontFamily="@font/bold"
                 android:lineSpacingExtra="@dimen/dp4"
-                android:text="We're Done when\nI Say We're Done"
+                android:text="@string/msg_loader"
                 app:layout_constraintBottom_toBottomOf="@+id/loader"
                 app:layout_constraintStart_toEndOf="@+id/loader"
                 app:layout_constraintTop_toTopOf="@+id/loader" />
@@ -124,7 +128,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="@font/medium"
-            android:text="@string/label_no_results"
+            android:text="@string/msg_no_results"
             android:textColor="@android:color/white"
             android:textSize="@dimen/sp18"
             android:visibility="gone" />

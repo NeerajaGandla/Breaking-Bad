@@ -5,8 +5,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
-import androidx.constraintlayout.widget.ConstraintLayout
+import android.widget.Filter
+import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
 import com.piyush.apps.breakingbad.R
 import com.piyush.apps.breakingbad.model.Character
@@ -14,6 +14,7 @@ import com.piyush.apps.breakingbad.view.DetailActivity
 import com.piyush.apps.breakingbad.view.HomeActivity
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.list_character.view.*
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -29,12 +30,30 @@ class AdapterCharacters(private val charactersList : ArrayList<Character>, priva
     }
 
     inner class Holder(itemView : View) : RecyclerView.ViewHolder(itemView.rootView) {
-        val tvName: TextView = itemView.findViewById(R.id.tv_name)
-        val tvActor: TextView = itemView.findViewById(R.id.tv_actor)
-        val ivChar: ImageView = itemView.findViewById(R.id.iv_char)
-        val llDetail: LinearLayout = itemView.findViewById(R.id.ll_detail)
-        val clRoot: ConstraintLayout = itemView.findViewById(R.id.char_root_cl)
-        val ivPlaceholder: ImageView = itemView.findViewById(R.id.iv_placeholder)
+
+        fun bindData(character: Character) {
+            Picasso.get().load(character.img)
+                .fit().centerCrop().into(itemView.iv_char, object : Callback{
+                    override fun onSuccess() {
+                        itemView.tv_name.text = character.name
+                        itemView.tv_actor.text = character.portrayed
+                        itemView.iv_placeholder.visibility = View.GONE
+                        itemView.ll_detail.visibility = View.VISIBLE
+                        itemView.char_root_cl.background = null
+                    }
+                    override fun onError(e: Exception?) {
+                        e?.printStackTrace()
+                        Log.e("check_error", "Failed with : ${e.toString()}")
+                    }
+                })
+
+            itemView.setOnClickListener {
+                val intent = Intent(context, DetailActivity::class.java)
+                intent.putExtra("character", character)
+                context.startActivity(intent)
+                context.overridePendingTransition(R.anim.slide_up, R.anim.slide_down)
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = Holder(LayoutInflater.from(parent.context).inflate(
@@ -43,32 +62,7 @@ class AdapterCharacters(private val charactersList : ArrayList<Character>, priva
     override fun getItemCount() = filteredList.size
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
-        val character = filteredList[position]
-        Picasso.get().load(character.img)
-           .fit().centerCrop().into(holder.ivChar, object : Callback{
-                override fun onSuccess() {
-                    holder.tvName.text = character.name
-                    holder.tvActor.text = character.portrayed
-                    holder.ivPlaceholder.visibility = View.GONE
-                    holder.llDetail.visibility = View.VISIBLE
-                    holder.clRoot.background = null
-                }
-
-                override fun onError(e: Exception?) {
-                    e?.printStackTrace()
-                    Log.e("check_error", "Failed with : ${e.toString()}")
-                }
-
-            })
-        holder.itemView.setOnClickListener {
-            val intent = Intent(context, DetailActivity::class.java)
-            intent.putExtra("character", character)
-            context.startActivity(intent)
-            context.overridePendingTransition(
-                R.anim.slide_up,
-                R.anim.slide_down
-            )
-        }
+        holder.bindData(filteredList[position])
     }
 
     override fun getFilter(): Filter {
@@ -96,5 +90,11 @@ class AdapterCharacters(private val charactersList : ArrayList<Character>, priva
             }
 
         }
+    }
+
+    fun updateList(updatedList: List<Character>) {
+        filteredList.clear()
+        filteredList.addAll(updatedList)
+        notifyDataSetChanged()
     }
 }

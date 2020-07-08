@@ -1,83 +1,55 @@
 package com.piyush.apps.breakingbad.view
 
-import android.content.Context
 import android.content.Intent
-import android.graphics.Typeface
 import android.os.Bundle
 import android.text.Editable
-import android.text.Spannable
-import android.text.SpannableString
 import android.text.TextWatcher
-import android.util.Log
-import android.view.*
-import android.view.inputmethod.InputMethodManager
+import android.view.Menu
+import android.view.MenuItem
+import android.view.SubMenu
+import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.GravityCompat
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.navigation.NavigationView
-import com.piyush.apps.breakingbad.view.adapters.AdapterCharacters
-import com.piyush.apps.breakingbad.model.Character
-import com.piyush.apps.breakingbad.util.CustomTypefaceSpan
 import com.piyush.apps.breakingbad.R
-import com.piyush.apps.breakingbad.model.network.NetworkService
+import com.piyush.apps.breakingbad.helper.AppUtils.Companion.applyFontToMenuItem
+import com.piyush.apps.breakingbad.helper.AppUtils.Companion.hideKeyboard
+import com.piyush.apps.breakingbad.helper.Status
+import com.piyush.apps.breakingbad.helper.showToast
+import com.piyush.apps.breakingbad.view.adapters.AdapterCharacters
+import com.piyush.apps.breakingbad.viewmodel.AppViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_toolbar.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import java.util.*
 
-
+@AndroidEntryPoint
 class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private var isSearchOpened = false
-    private val charList = ArrayList<Character>()
     private lateinit var characterAdapter : AdapterCharacters
+
+    private val appViewModel : AppViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayShowTitleEnabled(false)
+        initUI()
 
-        val toggle = ActionBarDrawerToggle(this, drawer_layout, toolbar,
-            R.string.navigation_drawer_open,
-            R.string.navigation_drawer_close
-        )
-        drawer_layout.addDrawerListener(toggle)
-        toggle.syncState()
-        nav_view.setNavigationItemSelectedListener(this)
-
-        val m: Menu = nav_view.menu
-        for (i in 0 until m.size()) {
-            val mi = m.getItem(i)
-            val subMenu: SubMenu? = mi.subMenu
-            if (subMenu != null && subMenu.size() > 0) {
-                for (j in 0 until subMenu.size()) {
-                    val subMenuItem: MenuItem = subMenu.getItem(j)
-                    applyFontToMenuItem(subMenuItem)
-                }
-            }
-            applyFontToMenuItem(mi)
-        }
-
-        rv_character.apply {
-            layoutManager = GridLayoutManager(this@HomeActivity, 2, LinearLayoutManager.VERTICAL, false)
-            setHasFixedSize(true)
-            setEmptyView(no_result)
-            setItemViewCacheSize(20)
-        }
+        observeCharacters()
 
         iv_back.setOnClickListener {
             hideSearchBar()
         }
         iv_cancel.setOnClickListener {
             edit_search.text = null
-            hideKeyboard()
+            hideKeyboard(this)
         }
         edit_search.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -94,8 +66,57 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
 
         })
+    }
 
-        fetchCharacters()
+    private fun initUI() {
+        setSupportActionBar(toolbar)
+
+        val toggle = ActionBarDrawerToggle(this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        drawer_layout.addDrawerListener(toggle)
+        toggle.syncState()
+
+        nav_view.setNavigationItemSelectedListener(this)
+        val m: Menu = nav_view.menu
+        for (i in 0 until m.size()) {
+            val mi = m.getItem(i)
+            val subMenu: SubMenu? = mi.subMenu
+            if (subMenu != null && subMenu.size() > 0) {
+                for (j in 0 until subMenu.size()) {
+                    val subMenuItem: MenuItem = subMenu.getItem(j)
+                    applyFontToMenuItem(subMenuItem, this)
+                }
+            }
+            applyFontToMenuItem(mi, this)
+        }
+
+        characterAdapter = AdapterCharacters(arrayListOf(), this)
+        rv_character.apply {
+            layoutManager = GridLayoutManager(this@HomeActivity, 2, LinearLayoutManager.VERTICAL, false)
+            setHasFixedSize(true)
+            setEmptyView(no_result)
+            setItemViewCacheSize(20)
+            adapter = characterAdapter
+        }
+    }
+    private fun observeCharacters() {
+        appViewModel.characters.observe(this, Observer {
+            when(it.status) {
+                Status.LOADING -> {
+                    loading_view.visibility = View.VISIBLE
+                }
+                Status.SUCCESS -> {
+                    it.data?.let {characters ->
+                        characterAdapter.updateList(characters)
+                        loading_view.visibility = View.GONE
+                    }
+                }
+                Status.ERROR -> {
+                    no_result.visibility = View.VISIBLE
+                    loading_view.visibility = View.GONE
+                    showToast(it.message!!)
+                }
+            }
+        })
     }
 
     override fun onBackPressed() {
@@ -142,53 +163,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val params : CoordinatorLayout.LayoutParams = rv_character.layoutParams as CoordinatorLayout.LayoutParams
         params.topMargin = 16
         rv_character.layoutParams = params
-    }
-    private fun hideKeyboard() {
-        val view = this.currentFocus
-        view?.let { v ->
-            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-            imm?.hideSoftInputFromWindow(v.windowToken, 0)
-        }
-    }
-    private fun fetchCharacters() {
-        val service = NetworkService.getNetworkService().listCharacters()
-        service.enqueue(object : Callback<List<Character>>{
-            override fun onResponse(call: Call<List<Character>>, response: Response<List<Character>>) {
-                if (response.isSuccessful) {
-                    Log.e("check_res", "Success")
-                    charList.clear()
-                    charList.addAll(response.body()!!)
-                    characterAdapter =
-                        AdapterCharacters(
-                            charList,
-                            this@HomeActivity
-                        )
-                    rv_character.adapter = characterAdapter
-                } else {
-                    Log.e("check_res", "Success But failed")
-                }
-                loading_view.visibility = View.GONE
-            }
-            override fun onFailure(call: Call<List<Character>>, t: Throwable) {
-                t.printStackTrace()
-                Log.e("check_error", "Failed")
-                no_result.visibility = View.VISIBLE
-                loading_view.visibility = View.GONE
-            }
-        })
-    }
-
-    private fun applyFontToMenuItem(mi: MenuItem) {
-        val font = Typeface.createFromAsset(assets, "regular.ttf")
-        val mNewTitle = SpannableString(mi.title)
-        mNewTitle.setSpan(
-            CustomTypefaceSpan("", font),
-            0,
-            mNewTitle.length,
-            Spannable.SPAN_INCLUSIVE_INCLUSIVE
-        )
-        //mNewTitle.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, mNewTitle.length(), 0); Use this if you want to center the items
-        mi.title = mNewTitle
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
