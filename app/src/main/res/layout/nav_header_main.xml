@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/nav_header_height"
     android:background="@android:color/black"
@@ -17,6 +18,6 @@
         android:layout_width="@dimen/dp128"
         android:layout_height="@dimen/dp128"
         android:layout_gravity="center"
-        android:contentDescription="@string/nav_header_desc"
-        app:srcCompat="@mipmap/app_icon_round" />
+        app:srcCompat="@mipmap/app_icon_round"
+        tools:ignore="ContentDescription" />
 </LinearLayout>

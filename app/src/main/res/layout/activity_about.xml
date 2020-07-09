@@ -47,7 +47,7 @@
                 android:layout_marginStart="@dimen/dp24"
                 android:layout_marginTop="@dimen/dp12"
                 android:fontFamily="@font/bold"
-                android:text="@string/author_name"
+                android:text="@string/value_about_author_name"
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/sp18"
                 app:layout_constraintStart_toStartOf="parent"
@@ -60,7 +60,7 @@
                 android:layout_marginStart="@dimen/dp24"
                 android:layout_marginTop="@dimen/dp4"
                 android:fontFamily="@font/medium"
-                android:text="@string/author_desc"
+                android:text="@string/value_about_author_desc"
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/sp12"
                 app:layout_constraintStart_toStartOf="parent"
@@ -74,7 +74,8 @@
                 android:layout_marginTop="27dp"
                 android:src="@drawable/icon_mail"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_desc" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_desc"
+                tools:ignore="ContentDescription" />
 
             <ImageView
                 android:id="@+id/iv_linkedin"
@@ -84,7 +85,8 @@
                 android:layout_marginTop="@dimen/dp24"
                 android:src="@drawable/icon_linkedin"
                 app:layout_constraintStart_toEndOf="@+id/iv_mail"
-                app:layout_constraintTop_toBottomOf="@+id/tv_desc" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_desc"
+                tools:ignore="ContentDescription" />
 
             <ImageView
                 android:id="@+id/iv_github"
@@ -94,7 +96,8 @@
                 android:layout_marginTop="@dimen/dp24"
                 android:src="@drawable/icon_github"
                 app:layout_constraintStart_toEndOf="@+id/iv_linkedin"
-                app:layout_constraintTop_toBottomOf="@+id/tv_desc" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_desc"
+                tools:ignore="ContentDescription" />
 
             <ImageView
                 android:id="@+id/iv_twitter"
@@ -104,7 +107,8 @@
                 android:layout_marginTop="@dimen/dp24"
                 android:src="@drawable/icon_twitter"
                 app:layout_constraintStart_toEndOf="@+id/iv_github"
-                app:layout_constraintTop_toBottomOf="@+id/tv_desc" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_desc"
+                tools:ignore="ContentDescription" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/app_card"
@@ -170,7 +174,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp24"
                         android:fontFamily="@font/regular"
-                        android:text="@string/app_desc"
+                        android:text="@string/value_about_app_desc"
                         android:textColor="@android:color/white"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
