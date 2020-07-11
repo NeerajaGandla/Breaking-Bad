@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'dagger.hilt.android.plugin'
 
 android {
     compileSdkVersion 29
@@ -11,15 +12,24 @@ android {
         applicationId "com.piyush.apps.breakingbad"
         minSdkVersion 22
         targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.1"
+
+        buildConfigField 'String', 'EMAIL', "\"pandeypiyush94@gmail.com\""
+        buildConfigField 'String', 'GITHUB', "\"https://github.com/pandeypiyush94\""
+        buildConfigField 'String', 'TWITTER', "\"https://twitter.com/PandeyPiyushK\""
+        buildConfigField 'String', 'LINKEDIN', "\"https://www.linkedin.com/in/piyush-pandey-7755b9121/\""
+
+        buildConfigField 'String', 'API_WEBSITE', "\"https://breakingbadapi.com/\""
+        buildConfigField 'String', 'BASE_URL', "\"https://www.breakingbadapi.com/api/\""
+        buildConfigField 'String', 'API_GITHUB', "\"https://github.com/timbiles/Breaking-Bad--API\""
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -34,6 +44,9 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
+    }
+    kapt {
+        correctErrorTypes true
     }
 }
 
@@ -61,6 +74,10 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
 
+    //OkHttp
+    implementation "com.squareup.okhttp3:okhttp:4.7.2"
+    implementation "com.squareup.okhttp3:logging-interceptor:4.7.2"
+
     //Lifecycle, LiveData & ViewModel
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0-alpha05'
@@ -68,22 +85,23 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-livedata-core-ktx:2.3.0-alpha05'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.0-alpha05'
 
-    //Dagger DI
-    implementation 'com.google.dagger:dagger:2.22.1'
+    //Dagger-Hilt DI
+    implementation 'com.google.dagger:hilt-android:2.28-alpha'
+    kapt 'com.google.dagger:hilt-android-compiler:2.28-alpha'
+
+    //Dagger-Hilt Jetpack Extensions
+    implementation 'androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha01'
+    kapt 'androidx.hilt:hilt-compiler:1.0.0-alpha01'
+
+    //Navigation
     implementation 'androidx.navigation:navigation-fragment:2.3.0'
     implementation 'androidx.navigation:navigation-ui:2.3.0'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.3.0'
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.0'
-    kapt 'com.google.dagger:dagger-compiler:2.22.1'
-
-    //Dagger Android DI
-    implementation 'com.google.dagger:dagger-android:2.22.1'
-    implementation 'com.google.dagger:dagger-android-support:2.22.1'
-    kapt 'com.google.dagger:dagger-android-processor:2.22.1'
 
     //Coroutines
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.4"
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.4'
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.6"
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.6'
 
     //Room
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
@@ -92,7 +110,7 @@ dependencies {
     implementation "androidx.room:room-runtime:2.2.5"
 
     //Testing
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 

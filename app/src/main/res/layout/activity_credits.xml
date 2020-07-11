@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/black">
@@ -36,7 +35,7 @@
             android:fontFamily="@font/bold"
             android:textSize="@dimen/sp18"
             android:textColor="@android:color/black"
-            android:text="@string/author_api_name"
+            android:text="@string/value_credit_api_author_name"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
@@ -47,7 +46,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp4"
             android:fontFamily="@font/medium"
-            android:text="@string/author_api_desc"
+            android:text="@string/value_credit_api_desc"
             android:textColor="@android:color/black"
             android:textSize="@dimen/sp12"
             app:layout_constraintStart_toStartOf="parent"
@@ -61,7 +60,7 @@
             android:textSize="@dimen/sp16"
             android:layout_marginTop="@dimen/dp12"
             android:textColor="@android:color/black"
-            android:text="@string/api_doc"
+            android:text="@string/value_credit_api_doc"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_author_desc" />
 
@@ -73,7 +72,7 @@
             android:textSize="@dimen/sp16"
             android:layout_marginTop="@dimen/dp12"
             android:textColor="@android:color/black"
-            android:text="@string/api_github"
+            android:text="@string/value_credit_api_github"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_api_doc" />
 
